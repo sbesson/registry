@@ -9,9 +9,4 @@ cache: pip
 
 env: PIP_ALLOW_EXTERNAL=PIL PIP_ALLOW_UNVERIFIED=PIL
 
-# See http://docs.travis-ci.com/user/using-postgresql/
-addons: postgresql
-
-before_script:
-  - psql -c 'CREATE USER feedback_user;' -U postgres
-  - psql -c 'CREATE DATABASE feedback WITH OWNER feedback_user;' -U postgres  
+script: python manage.py test registry
