@@ -8,3 +8,10 @@ sudo: false
 cache: pip
 
 env: PIP_ALLOW_EXTERNAL=PIL PIP_ALLOW_UNVERIFIED=PIL
+
+# See http://docs.travis-ci.com/user/using-postgresql/
+addons: postgresql
+
+before_script:
+  - psql -c 'createuser -P -D -R -S feedback_user;' -U postgres
+  - psql -c 'createdb -O feedback_user feedback;' -U postgres  
