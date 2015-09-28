@@ -1,7 +1,5 @@
 from settings import *
 
-from settingsprod import *
-
 DATABASES['default'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'TEST_CHARSET': 'UTF8',

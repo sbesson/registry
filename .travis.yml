@@ -9,6 +9,11 @@ cache: pip
 
 env: PIP_ALLOW_EXTERNAL=PIL PIP_ALLOW_UNVERIFIED=PIL
 
-before_script: echo "from settings import *" > omero_qa/settingsprod.py
+before_script:
+  - curl -O http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+  - curl -O http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+  - gzip -d GeoIP.dat.gz
+  - gzip -d GeoLiteCity.dat.gz
+  - mv Geo* omero_qa
 
 script: python manage.py test registry --settings=omero_qa.settings-test
