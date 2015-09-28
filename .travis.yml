@@ -13,5 +13,5 @@ env: PIP_ALLOW_EXTERNAL=PIL PIP_ALLOW_UNVERIFIED=PIL
 addons: postgresql
 
 before_script:
-  - psql -c 'createuser -P -D -R -S feedback_user;' -U postgres
-  - psql -c 'createdb -O feedback_user feedback;' -U postgres  
+  - psql -c 'create user -P -D -R -S feedback_user;' -U postgres
+  - psql -c 'create database -O feedback_user feedback;' -U postgres  
