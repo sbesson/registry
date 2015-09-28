@@ -9,4 +9,6 @@ cache: pip
 
 env: PIP_ALLOW_EXTERNAL=PIL PIP_ALLOW_UNVERIFIED=PIL
 
-script: PYTHONPATH=./omero_qa:$PYTHONPATH python manage.py test registry --settings=omero_qa.settings-test
+before_script: echo "from settings import *" > omero_qa/settingsprod.py
+
+script: python manage.py test registry --settings=omero_qa.settings-test
