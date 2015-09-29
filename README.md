@@ -24,32 +24,29 @@ Development Installation
         pip install numpy
         pip install -r requirements.txt
 
-3. Set up your database
-
-        # Create a PostgreSQL user
-        sudo -u postgres createuser -P -D -R -S feedback_user
-        # Create a database
-        sudo -u postgres createdb -O feedback_user feedback
-
-4. Download and extract the GeoIP country and city databases
+3. Download and extract the GeoIP country and city databases
 
         curl -O http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
         curl -O http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
         gzip -d GeoIP.dat.gz
         gzip -d GeoLiteCity.dat.gz
 
-5. How to migrate the existing database
-    * Generate files by the script doc/dbdump.py
-    * Execute select count(*) from hit;
-    * edit the dbdump.py and change LIMIT if 10 000 000 is not enough :-)
-    * dump the existing db to qa-2009-10-01.db file
-    * python dbdump.py  qa-2009-10-01.db > hit.sql
-    * copy hit.sql to your_path/omero_qa/registry/sql/
+4. Run tests
+
+        python manage.py test registry --settings=omero_qa.settings-test -v 3
+
+6. Set up your database
+
+        # Create a PostgreSQL user
+        sudo -u postgres createuser -P -D -R -S feedback_user
+        # Create a database
+        sudo -u postgres createdb -O feedback_user feedback
+
 
 Configuration
 =============
 
-* Create new settingsprod.py and import default settings
+* Create new settings_prod.py and import default settings
 
         from settings import *
 
@@ -61,7 +58,7 @@ Configuration
 * Set `ADMINS`
 
         ADMINS = (
-            ('Aleksandra Tarkowska', 'A.Tarkowska@dundee.ac.uk'),
+            ('User name', 'email'),
         )
 
 * Change database settings
@@ -127,4 +124,4 @@ Legal
 
 The source for OMERO.qa is released under the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-OMERO.qa is Copyright (C) 2008-2012 University of Dundee
+OMERO.qa is Copyright (C) 2008-2015 University of Dundee
