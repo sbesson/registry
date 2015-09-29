@@ -31,7 +31,8 @@ class RegistryTestCase(TestCase):
 
     def setUp(self):
         Version.objects.create(version="1.2.3")
-        Agent.objects.create(agent_name="OMERO.test", display_name="OMERO.test")
+        Agent.objects.create(agent_name="OMERO.test",
+                             display_name="OMERO.test")
         self.factory = RequestFactory()
 
     def test_empty_hit(self):
@@ -40,12 +41,18 @@ class RegistryTestCase(TestCase):
         response = self.client.get(hit_url)
         self.assertEqual(response.status_code, 302)
 
+        # check if nothing was created
+        self.assertEqual(Hit.objects.all().count(), 0)
+
     def test_bad_agent(self):
         hit_url = reverse('registry_hit')
 
         request = self.factory.get(hit_url, HTTP_USER_AGENT='foo')
         response = views_hit(request)
         self.assertEqual(response.status_code,302)
+
+        # check if nothing was created
+        self.assertEqual(Hit.objects.all().count(), 0)
 
     def test_old_version(self):
         ver = Version.objects.get(pk=1)
@@ -60,13 +67,19 @@ class RegistryTestCase(TestCase):
 
         hit_url = reverse('registry_hit')
 
-        request = self.factory.get(hit_url, data, HTTP_USER_AGENT='OMERO.test')
+        request = self.factory.get(hit_url, data,
+                                   HTTP_USER_AGENT='OMERO.test')
 
         response = views_hit(request)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'Please upgrade to %s. See http://downloads.openmicroscopy.org/latest-stable/omero for the latest version.' % ver.version)
+        self.assertEqual(
+            response.content,
+            ('Please upgrade to %s. See '
+             'http://downloads.openmicroscopy.org/latest-stable/omero'
+             ' for the latest version.') % ver.version)
 
         hit = Hit.objects.get(agent_version=data["version"])
+        self.assertEqual(hit.agent.agent_name, 'OMERO.test')
         self.assertEqual(hit.os_name, data["os.name"])
         self.assertEqual(hit.os_arch, data["os.arch"])
         self.assertEqual(hit.os_version, data["os.version"])
@@ -87,13 +100,15 @@ class RegistryTestCase(TestCase):
     
         hit_url = reverse('registry_hit')
 
-        request = self.factory.get(hit_url, data, HTTP_USER_AGENT='OMERO.test')
+        request = self.factory.get(hit_url, data,
+                                   HTTP_USER_AGENT='OMERO.test')
 
         response = views_hit(request)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, '')
 
         hit = Hit.objects.get(agent_version=data["version"])
+        self.assertEqual(hit.agent.agent_name, 'OMERO.test')
         self.assertEqual(hit.os_name, data["os.name"])
         self.assertEqual(hit.os_arch, data["os.arch"])
         self.assertEqual(hit.os_version, data["os.version"])
