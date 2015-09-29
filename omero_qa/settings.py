@@ -280,7 +280,7 @@ UPLOAD_ROOT = '/FileStore'
 PERPAGE = 50
 
 GEOIP = os.path.join(
-    os.path.dirname(__file__), 'GeoIP.dat').replace('\\', '/')
+    os.path.dirname(__file__), '..', 'GeoIP.dat').replace('\\', '/')
 GEODAT = os.path.join(
-    os.path.dirname(__file__), 'GeoLiteCity.dat').replace('\\', '/')
+    os.path.dirname(__file__), '..', 'GeoLiteCity.dat').replace('\\', '/')
 
